@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>80088LOANS - Houston Infill Development Portfolio</title>
+    <meta
+      name="description"
+      content="Interactive investor-grade web presentation for 80088LOANS - Houston Infill Development Portfolio."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="topbar">
+        <div class="brand-lockup">
+          <span class="brand-mark">80088</span>
+          <div>
+            <p class="eyebrow">Investor Web Presentation</p>
+            <h1 class="brand-name">80088LOANS</h1>
+          </div>
+        </div>
+        <nav class="topnav">
+          <a href="#cover">Overview</a>
+          <a href="#pipeline">Pipeline</a>
+          <a href="#returns">Returns</a>
+          <a href="#cta">Invest</a>
+        </nav>
+      </header>
+
+      <aside class="rail">
+        <div class="rail-line"></div>
+        <div class="rail-progress"></div>
+        <div class="rail-dots" id="rail-dots"></div>
+      </aside>
+
+      <main class="deck">
+        <section class="panel cover-panel active-panel" id="cover" data-label="01">
+          <div class="media-bg hero-bg"></div>
+          <div class="media-vignette"></div>
+          <div class="hero-grid">
+            <div class="hero-copy glass">
+              <p class="eyebrow">Secured Real Estate Lending Opportunity</p>
+              <h2>Houston Infill Development Portfolio</h2>
+              <p class="lede">
+                Institutional-style exposure to inner-loop land, redevelopment, and
+                shovel-ready residential infill sites through a secured lending
+                structure.
+              </p>
+              <div class="hero-actions">
+                <a class="button button-gold" href="#opportunity">Enter Presentation</a>
+                <a class="button button-ghost" href="#cta">Review Terms</a>
+              </div>
+            </div>
+            <div class="hero-stats">
+              <article class="metric-card glass">
+                <span class="metric-label">Structured Return</span>
+                <strong class="metric-value">20%</strong>
+                <span class="metric-sub">Fixed return profile</span>
+              </article>
+              <article class="metric-card glass">
+                <span class="metric-label">Investment Term</span>
+                <strong class="metric-value">9-18</strong>
+                <span class="metric-sub">Months to maturity</span>
+              </article>
+              <article class="metric-card glass">
+                <span class="metric-label">Portfolio Scope</span>
+                <strong class="metric-value">18+</strong>
+                <span class="metric-sub">Infill properties</span>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="opportunity" data-label="02">
+          <div class="panel-intro">
+            <p class="eyebrow">The Opportunity</p>
+            <h2>Houston demand is moving inward while developable land gets tighter.</h2>
+          </div>
+          <div class="opportunity-grid">
+            <div class="copy-card glass">
+              <ul class="bullet-list">
+                <li>Urban infill demand supported by migration, job formation, and household growth.</li>
+                <li>Inner-city neighborhoods continue to absorb modern townhome and small-lot product.</li>
+                <li>Limited land supply inside key corridors creates scarcity value for positioned sites.</li>
+                <li>Short-duration lending can participate before full vertical execution risk.</li>
+              </ul>
+            </div>
+            <div class="map-card glass">
+              <div class="map-header">
+                <span class="caption">Houston focus map</span>
+                <span class="zip-pill">77007</span>
+                <span class="zip-pill">77008</span>
+                <span class="zip-pill">77009</span>
+                <span class="zip-pill">77019</span>
+                <span class="zip-pill">77023</span>
+              </div>
+              <svg viewBox="0 0 520 360" class="houston-map" aria-label="Houston infill target zip codes">
+                <defs>
+                  <linearGradient id="mapGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#173a68" />
+                    <stop offset="100%" stop-color="#0b1f3a" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M88 103l81-42 81 11 57-25 119 46-14 62 37 55-62 42-28 55-87 10-56-28-93 15-62-44 13-71-29-41z"
+                  fill="url(#mapGlow)"
+                  stroke="rgba(255,255,255,0.18)"
+                  stroke-width="2"
+                />
+                <path
+                  d="M100 150h324M149 99l181 205M242 76l-47 226M396 112l-244 106"
+                  stroke="rgba(255,255,255,0.07)"
+                  stroke-width="2"
+                />
+                <g class="map-point">
+                  <circle cx="195" cy="128" r="10"></circle>
+                  <circle cx="195" cy="128" r="26" class="pulse"></circle>
+                  <text x="214" y="133">77008</text>
+                </g>
+                <g class="map-point">
+                  <circle cx="231" cy="159" r="10"></circle>
+                  <circle cx="231" cy="159" r="26" class="pulse"></circle>
+                  <text x="249" y="164">77007</text>
+                </g>
+                <g class="map-point">
+                  <circle cx="251" cy="118" r="10"></circle>
+                  <circle cx="251" cy="118" r="26" class="pulse"></circle>
+                  <text x="269" y="123">77009</text>
+                </g>
+                <g class="map-point">
+                  <circle cx="294" cy="184" r="10"></circle>
+                  <circle cx="294" cy="184" r="26" class="pulse"></circle>
+                  <text x="313" y="189">77019</text>
+                </g>
+                <g class="map-point">
+                  <circle cx="331" cy="213" r="10"></circle>
+                  <circle cx="331" cy="213" r="26" class="pulse"></circle>
+                  <text x="349" y="218">77023</text>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="overview" data-label="03">
+          <div class="panel-intro">
+            <p class="eyebrow">Investment Overview</p>
+            <h2>A clean capital story with seniority, duration, and real asset support.</h2>
+          </div>
+          <div class="overview-grid">
+            <article class="icon-card glass">
+              <span class="icon">S</span>
+              <h3>Secured Note</h3>
+              <p>Promissory note structure aligned to defined collateral and maturity.</p>
+            </article>
+            <article class="icon-card glass">
+              <span class="icon">20</span>
+              <h3>20% Fixed Return</h3>
+              <p>Structured return language designed for clarity and investor discipline.</p>
+            </article>
+            <article class="icon-card glass">
+              <span class="icon">9-18</span>
+              <h3>Short Term</h3>
+              <p>Duration intended to bridge entitlement, repositioning, and disposition windows.</p>
+            </article>
+            <article class="icon-card glass">
+              <span class="icon">RE</span>
+              <h3>Asset-Backed</h3>
+              <p>Collateral underpinned by a diversified portfolio of infill real estate sites.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel media-panel" id="portfolio" data-label="04">
+          <div class="media-split">
+            <div class="photo-stack">
+              <div class="stack-image aerial-bg"></div>
+              <div class="stack-image townhouse-bg"></div>
+            </div>
+            <div class="media-copy">
+              <p class="eyebrow">Portfolio Overview</p>
+              <h2>18+ targeted properties across inner-loop and high-conviction infill nodes.</h2>
+              <div class="stats-grid">
+                <article class="mini-stat glass">
+                  <strong>18+</strong>
+                  <span>Active and near-term sites</span>
+                </article>
+                <article class="mini-stat glass">
+                  <strong>Inner Loop</strong>
+                  <span>Location bias toward premium residential absorption</span>
+                </article>
+                <article class="mini-stat glass">
+                  <strong>Shovel-Ready</strong>
+                  <span>Mix of entitled, replatted, and redevelopment opportunities</span>
+                </article>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="why-houston" data-label="05">
+          <div class="why-grid">
+            <div class="panel-intro">
+              <p class="eyebrow">Why Houston</p>
+              <h2>Scale, affordability, and development pragmatism make Houston uniquely financeable.</h2>
+            </div>
+            <div class="why-visual-stack">
+              <div class="why-image houston-gold-bg"></div>
+              <div class="why-cards">
+                <article class="glass emphasis-card">
+                  <span class="caption">Job engine</span>
+                  <p>Multi-industry employment depth supports durable housing demand.</p>
+                </article>
+                <article class="glass emphasis-card">
+                  <span class="caption">Population inflow</span>
+                  <p>Migration continues to reinforce household formation and infill velocity.</p>
+                </article>
+                <article class="glass emphasis-card">
+                  <span class="caption">Relative affordability</span>
+                  <p>Houston remains compelling versus other major Sun Belt urban cores.</p>
+                </article>
+                <article class="glass emphasis-card">
+                  <span class="caption">Execution environment</span>
+                  <p>Developer-friendly entitlement and redevelopment culture favor nimble sponsors.</p>
+                </article>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel strategy-panel" id="strategy" data-label="06">
+          <div class="panel-intro">
+            <p class="eyebrow">Value Creation Strategy</p>
+            <h2>Acquire. Entitle. Exit or build into highest-and-best-use pathways.</h2>
+          </div>
+          <div class="strategy-flow">
+            <article class="flow-card glass">
+              <span>01</span>
+              <h3>Acquire</h3>
+              <p>Source inner-city parcels, assemblages, and mispriced redevelopment opportunities.</p>
+            </article>
+            <article class="flow-arrow">→</article>
+            <article class="flow-card glass">
+              <span>02</span>
+              <h3>Entitle</h3>
+              <p>Advance replats, diligence, site planning, and development readiness.</p>
+            </article>
+            <article class="flow-arrow">→</article>
+            <article class="flow-card glass">
+              <span>03</span>
+              <h3>Exit / Build</h3>
+              <p>Monetize through builder sales, portfolio transfers, vertical execution, or JV structures.</p>
+            </article>
+          </div>
+          <div class="strategy-image construction-bg"></div>
+        </section>
+
+        <section class="panel" id="pipeline" data-label="07">
+          <div class="panel-intro">
+            <p class="eyebrow">Current Pipeline</p>
+            <h2>Three repeatable deal types drive throughput and optionality.</h2>
+          </div>
+          <div class="pipeline-tabs">
+            <div class="tab-buttons">
+              <button class="tab-button active" data-tab="townhomes">Townhome Developments</button>
+              <button class="tab-button" data-tab="replatted">Replatted Lots</button>
+              <button class="tab-button" data-tab="shovel">Shovel-Ready Sites</button>
+            </div>
+            <div class="tab-panels glass">
+              <article class="tab-panel active" data-panel="townhomes">
+                <div class="tab-visual townhouse-bg"></div>
+                <div class="tab-copy">
+                  <h3>Urban townhome clusters</h3>
+                  <p>Targeted for buyers seeking modern design, walkable adjacency, and infill location premium.</p>
+                  <ul class="bullet-list compact">
+                    <li>Contemporary exterior product</li>
+                    <li>Efficient lot yield</li>
+                    <li>Builder exit flexibility</li>
+                  </ul>
+                </div>
+              </article>
+              <article class="tab-panel" data-panel="replatted">
+                <div class="tab-visual rendering-bg"></div>
+                <div class="tab-copy">
+                  <h3>Replatted and repositioned land</h3>
+                  <p>Value unlocked through lot restructuring, planning clarity, and improved marketability.</p>
+                  <ul class="bullet-list compact">
+                    <li>Improved density logic</li>
+                    <li>Defined entitlement path</li>
+                    <li>Cleaner sales package</li>
+                  </ul>
+                </div>
+              </article>
+              <article class="tab-panel" data-panel="shovel">
+                <div class="tab-visual construction-bg"></div>
+                <div class="tab-copy">
+                  <h3>Shovel-ready execution sites</h3>
+                  <p>Sites positioned for accelerated capital turn once horizontal preparation is complete.</p>
+                  <ul class="bullet-list compact">
+                    <li>Reduced predevelopment drag</li>
+                    <li>Near-term disposition options</li>
+                    <li>Visibility on timeline</li>
+                  </ul>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel returns-panel" id="returns" data-label="08">
+          <div class="returns-copy">
+            <p class="eyebrow">Investor Returns</p>
+            <h2>Simple economics. Strong visual clarity.</h2>
+            <div class="returns-number">
+              <span class="returns-start">$100,000</span>
+              <span class="returns-arrow">→</span>
+              <span class="returns-end" data-target="120000">$120,000</span>
+            </div>
+            <p class="returns-caption">Illustrative gross maturity example based on the stated fixed return profile.</p>
+          </div>
+          <div class="curve-card glass">
+            <svg viewBox="0 0 520 320" class="growth-curve" aria-hidden="true">
+              <defs>
+                <linearGradient id="curveStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#c9a24a" />
+                  <stop offset="100%" stop-color="#f6d690" />
+                </linearGradient>
+              </defs>
+              <path d="M40 258 C120 250, 165 230, 215 205 S330 145, 405 85 S465 52, 490 38" />
+              <circle cx="40" cy="258" r="7"></circle>
+              <circle cx="490" cy="38" r="10"></circle>
+              <text x="22" y="286">$100K</text>
+              <text x="426" y="24">$120K</text>
+            </svg>
+          </div>
+        </section>
+
+        <section class="panel" id="capital" data-label="09">
+          <div class="panel-intro">
+            <p class="eyebrow">Capital Structure</p>
+            <h2>Senior debt sits ahead of the broader sponsor capital stack.</h2>
+          </div>
+          <div class="capital-grid">
+            <div class="stack-card glass">
+              <div class="stack-bar">
+                <div class="stack-top">20%<span>Investor - Senior Debt</span></div>
+                <div class="stack-bottom">80%<span>Sponsor / Capital</span></div>
+              </div>
+            </div>
+            <div class="copy-card glass">
+              <ul class="bullet-list">
+                <li>Debt-oriented position designed to prioritize repayment discipline.</li>
+                <li>Alignment through sponsor capital beneath the investor layer.</li>
+                <li>Collateral focus centered on real estate portfolio value and disposition paths.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="exit" data-label="10">
+          <div class="panel-intro">
+            <p class="eyebrow">Exit Strategy</p>
+            <h2>Multiple monetization paths reduce dependence on a single outcome.</h2>
+          </div>
+          <div class="icon-grid">
+            <article class="glass exit-card"><span class="icon">B</span><h3>Builder Sales</h3><p>Parcel and finished-lot disposition to active local builders.</p></article>
+            <article class="glass exit-card"><span class="icon">P</span><h3>Portfolio Sale</h3><p>Aggregated exit to capital or operating groups seeking scale.</p></article>
+            <article class="glass exit-card"><span class="icon">D</span><h3>Development</h3><p>Vertical execution where value capture supports build strategy.</p></article>
+            <article class="glass exit-card"><span class="icon">JV</span><h3>Joint Venture</h3><p>Structured partnerships where land basis and sponsor edge align.</p></article>
+          </div>
+        </section>
+
+        <section class="panel" id="risk" data-label="11">
+          <div class="panel-intro">
+            <p class="eyebrow">Risk Mitigation</p>
+            <h2>Key underwriting considerations matched with defined mitigants.</h2>
+          </div>
+          <div class="risk-grid">
+            <article class="risk-card glass">
+              <h3>Market Risk</h3>
+              <p>Focus on liquid urban submarkets, modest duration, and multiple exit channels.</p>
+            </article>
+            <article class="risk-card glass">
+              <h3>Permit Risk</h3>
+              <p>Pipeline bias toward sites with clearer entitlement trajectories and sponsor familiarity.</p>
+            </article>
+            <article class="risk-card glass">
+              <h3>Liquidity Risk</h3>
+              <p>Portfolio-level collateral and staged monetization support repayment visibility.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel strength-panel" id="strength" data-label="12">
+          <div class="gauge-wrap glass">
+            <div class="gauge" data-score="81">
+              <div class="gauge-inner">
+                <span class="gauge-value">81</span>
+                <span class="gauge-denominator">/ 100</span>
+              </div>
+            </div>
+            <div class="gauge-copy">
+              <p class="eyebrow">Portfolio Strength</p>
+              <h2>81 / 100 composite positioning score.</h2>
+              <p>
+                Weighted against location, readiness, optionality, and asset-backed downside support.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="terms" data-label="13">
+          <div class="panel-intro">
+            <p class="eyebrow">Investor Terms</p>
+            <h2>Institutional presentation. Minimal ambiguity.</h2>
+          </div>
+          <div class="terms-grid">
+            <article class="term-card glass"><h3>Secured promissory note</h3><p>Defined structure with identified collateral orientation.</p></article>
+            <article class="term-card glass"><h3>Fixed return</h3><p>Clear economics communicated as structured debt exposure.</p></article>
+            <article class="term-card glass"><h3>Asset-backed</h3><p>Real estate portfolio underpins the lending narrative.</p></article>
+            <article class="term-card glass"><h3>Defined maturity</h3><p>9-18 month duration target aligned to execution cadence.</p></article>
+          </div>
+        </section>
+
+        <section class="panel legal-panel" id="legal" data-label="14">
+          <div class="legal-grid glass">
+            <div>
+              <p class="eyebrow">Legal & Structure</p>
+              <h2>Private lending framework with real estate collateral emphasis.</h2>
+            </div>
+            <div class="legal-copy">
+              <p>Offered as a private lending opportunity subject to documentation, underwriting, and applicable laws.</p>
+              <p>Collateral support is intended to be anchored in the referenced real estate portfolio and related security structure.</p>
+              <p>All materials should be reviewed alongside final legal agreements and jurisdiction-specific compliance requirements.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel about-panel" id="about" data-label="15">
+          <div class="about-banner rendering-bg"></div>
+          <div class="about-copy">
+            <p class="eyebrow">About 80088LOANS</p>
+            <h2>A development-focused lending platform designed around infill land and execution readiness.</h2>
+            <div class="about-points">
+              <article class="glass about-card"><h3>Real estate lending platform</h3><p>Purpose-built for property-backed capital opportunities.</p></article>
+              <article class="glass about-card"><h3>Development-oriented sourcing</h3><p>Concentrated on infill, entitlement, and land value unlock.</p></article>
+              <article class="glass about-card"><h3>Institutional presentation</h3><p>Clear structure, visual rigor, and disciplined investor communication.</p></article>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel cta-panel" id="cta" data-label="16">
+          <div class="cta-card glass">
+            <p class="eyebrow">Call to Action</p>
+            <h2>Invest in Houston’s Growth</h2>
+            <ol class="steps">
+              <li>Review offering materials and portfolio summary.</li>
+              <li>Execute investment agreement and confirm allocation.</li>
+              <li>Fund investment and enter the secured note position.</li>
+            </ol>
+            <div class="hero-actions">
+              <a class="button button-gold" href="#cover">Replay Presentation</a>
+              <a class="button button-ghost" href="mailto:investments@80088loans.com">Request Materials</a>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
