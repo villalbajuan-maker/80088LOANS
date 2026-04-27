@@ -1,1 +1,5 @@
 .vercel
+node_modules
+tmp
+og-image.png
+.DS_Store
