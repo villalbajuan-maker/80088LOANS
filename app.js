@@ -5,6 +5,18 @@ const tabs = [...document.querySelectorAll(".tab-button")];
 const tabPanels = [...document.querySelectorAll(".tab-panel")];
 const gauge = document.querySelector(".gauge");
 const returnsTarget = document.querySelector(".returns-end");
+const statusIndex = document.getElementById("status-index");
+const statusLabel = document.getElementById("status-label");
+const hudTitle = document.getElementById("hud-title");
+const navLinks = [...document.querySelectorAll(".topnav a")];
+const mobileNavLinks = [...document.querySelectorAll(".mobile-nav a")];
+const prevSectionButton = document.getElementById("prev-section");
+const nextSectionButton = document.getElementById("next-section");
+let currentSectionIndex = 0;
+
+function formatLabel(section) {
+  return section.querySelector(".eyebrow")?.textContent?.trim() || section.id;
+}
 
 sections.forEach((section, index) => {
   const dot = document.createElement("a");
@@ -16,27 +28,52 @@ sections.forEach((section, index) => {
 
 const dots = [...document.querySelectorAll(".rail-dot")];
 
+function setActiveSection(activeIndex) {
+  currentSectionIndex = activeIndex;
+  const activeSection = sections[activeIndex];
+
+  sections.forEach((panel) => panel.classList.remove("active-panel"));
+  activeSection.classList.add("active-panel");
+
+  dots.forEach((dot, index) => dot.classList.toggle("active", index === activeIndex));
+
+  navLinks.forEach((link) => {
+    const linkTarget = link.getAttribute("href");
+    link.classList.toggle("active", linkTarget === `#${activeSection.id}`);
+  });
+
+  mobileNavLinks.forEach((link) => {
+    const linkTarget = link.getAttribute("href");
+    link.classList.toggle("active", linkTarget === `#${activeSection.id}`);
+  });
+
+  const progressRatio = activeIndex / Math.max(sections.length - 1, 1);
+  progress.style.height = `${progressRatio * 100}%`;
+
+  if (statusIndex) {
+    statusIndex.textContent = String(activeIndex + 1).padStart(2, "0");
+  }
+
+  const label = formatLabel(activeSection);
+  if (statusLabel) statusLabel.textContent = label;
+  if (hudTitle) hudTitle.textContent = label;
+
+  if (activeSection.id === "strength") {
+    animateGauge();
+  }
+
+  if (activeSection.id === "returns") {
+    animateReturn();
+  }
+}
+
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
 
       const activeIndex = sections.indexOf(entry.target);
-      sections.forEach((panel) => panel.classList.remove("active-panel"));
-      entry.target.classList.add("active-panel");
-
-      dots.forEach((dot, index) => dot.classList.toggle("active", index === activeIndex));
-
-      const progressRatio = activeIndex / Math.max(sections.length - 1, 1);
-      progress.style.height = `${progressRatio * 100}%`;
-
-      if (entry.target.id === "strength") {
-        animateGauge();
-      }
-
-      if (entry.target.id === "returns") {
-        animateReturn();
-      }
+      setActiveSection(activeIndex);
     });
   },
   {
@@ -54,6 +91,39 @@ tabs.forEach((tab) => {
     tabs.forEach((button) => button.classList.toggle("active", button === tab));
     tabPanels.forEach((panel) => panel.classList.toggle("active", panel.dataset.panel === target));
   });
+});
+
+function scrollToSection(index) {
+  const boundedIndex = Math.max(0, Math.min(index, sections.length - 1));
+  sections[boundedIndex].scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+prevSectionButton?.addEventListener("click", () => scrollToSection(currentSectionIndex - 1));
+nextSectionButton?.addEventListener("click", () => scrollToSection(currentSectionIndex + 1));
+
+window.addEventListener("keydown", (event) => {
+  const tagName = document.activeElement?.tagName;
+  if (tagName === "INPUT" || tagName === "TEXTAREA") return;
+
+  if (["ArrowDown", "PageDown", "j", "J"].includes(event.key)) {
+    event.preventDefault();
+    scrollToSection(currentSectionIndex + 1);
+  }
+
+  if (["ArrowUp", "PageUp", "k", "K"].includes(event.key)) {
+    event.preventDefault();
+    scrollToSection(currentSectionIndex - 1);
+  }
+
+  if (event.key === "Home") {
+    event.preventDefault();
+    scrollToSection(0);
+  }
+
+  if (event.key === "End") {
+    event.preventDefault();
+    scrollToSection(sections.length - 1);
+  }
 });
 
 let gaugeAnimated = false;
@@ -87,5 +157,5 @@ function animateReturn() {
 }
 
 if (sections[0]) {
-  dots[0]?.classList.add("active");
+  setActiveSection(0);
 }
