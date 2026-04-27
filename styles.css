@@ -887,6 +887,45 @@ h3 {
   padding: 14px 10px 14px 6px;
 }
 
+.strike-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.strike-card {
+  padding: 24px;
+  border-radius: 24px;
+}
+
+.strike-card h3 {
+  margin: 14px 0 10px;
+  font-size: 1.18rem;
+}
+
+.strike-card p {
+  margin: 0;
+  color: var(--gray-200);
+  line-height: 1.65;
+}
+
+.strike-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.source-note {
+  width: min(var(--max-width), 100%);
+  margin: 18px auto 0;
+  color: var(--gray-300);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
 .returns-panel {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1381,6 +1420,7 @@ h3 {
   .about-points,
   .stats-grid,
   .terms-grid,
+  .strike-grid,
   .why-cards {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1475,6 +1515,7 @@ h3 {
   .about-points,
   .stats-grid,
   .terms-grid,
+  .strike-grid,
   .why-cards {
     grid-template-columns: 1fr;
   }
@@ -1591,6 +1632,14 @@ h3 {
 
   .tab-visual {
     min-height: 240px;
+  }
+
+  .strike-card {
+    padding: 20px;
+  }
+
+  .source-note {
+    font-size: 0.84rem;
   }
 
   .curve-card {
