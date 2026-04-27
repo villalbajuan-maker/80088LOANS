@@ -4,6 +4,8 @@ const accessGateForm = document.getElementById("access-gate-form");
 const accessLogin = document.getElementById("access-login");
 const accessCode = document.getElementById("access-code");
 const accessGateError = document.getElementById("access-gate-error");
+const accessBriefing = document.getElementById("access-briefing");
+const accessBriefingLines = [...document.querySelectorAll(".access-briefing-line")];
 const dotsWrap = document.getElementById("rail-dots");
 const progress = document.querySelector(".rail-progress");
 const tabs = [...document.querySelectorAll(".tab-button")];
@@ -30,12 +32,41 @@ let companionPending = false;
 const ACCESS_LOGIN = "investor";
 const ACCESS_CODE = "80088loans";
 const ACCESS_STORAGE_KEY = "80088loans-investor-access";
+const BRIEFING_DURATION_MS = 4200;
+const BRIEFING_ROTATION_MS = 1150;
 
 function unlockPresentation() {
   accessGate?.classList.add("is-hidden");
   accessGate?.setAttribute("aria-hidden", "true");
+  accessBriefing?.classList.remove("is-visible");
+  accessBriefing?.setAttribute("aria-hidden", "true");
   document.body.classList.remove("access-locked");
+  document.body.classList.remove("access-briefing-active");
   sessionStorage.setItem(ACCESS_STORAGE_KEY, "granted");
+}
+
+function showBriefingThenUnlock() {
+  accessGate?.classList.add("is-hidden");
+  accessGate?.setAttribute("aria-hidden", "true");
+  accessBriefing?.classList.add("is-visible");
+  accessBriefing?.setAttribute("aria-hidden", "false");
+  document.body.classList.add("access-briefing-active");
+
+  accessBriefingLines.forEach((line, index) => {
+    line.classList.toggle("is-active", index === 0);
+  });
+
+  accessBriefingLines.forEach((line, index) => {
+    window.setTimeout(() => {
+      accessBriefingLines.forEach((candidate, candidateIndex) => {
+        candidate.classList.toggle("is-active", candidateIndex === index);
+      });
+    }, index * BRIEFING_ROTATION_MS);
+  });
+
+  window.setTimeout(() => {
+    unlockPresentation();
+  }, BRIEFING_DURATION_MS);
 }
 
 function initAccessGate() {
@@ -208,7 +239,7 @@ accessGateForm?.addEventListener("submit", (event) => {
     if (accessGateError) {
       accessGateError.textContent = "";
     }
-    unlockPresentation();
+    showBriefingThenUnlock();
     return;
   }
 

@@ -47,6 +47,10 @@ body.access-locked {
   overflow: hidden;
 }
 
+body.access-briefing-active {
+  overflow: hidden;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -195,6 +199,97 @@ button,
 .access-gate-submit {
   width: 100%;
   margin-top: 6px;
+}
+
+.access-briefing {
+  position: fixed;
+  inset: 0;
+  z-index: 89;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 320ms var(--ease-premium), visibility 320ms var(--ease-premium);
+}
+
+.access-briefing.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.access-briefing-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 30%, rgba(201, 162, 74, 0.12), transparent 22%),
+    linear-gradient(180deg, rgba(4, 12, 22, 0.92), rgba(4, 12, 22, 0.97));
+  backdrop-filter: blur(12px);
+}
+
+.access-briefing-card {
+  position: relative;
+  z-index: 1;
+  width: min(560px, 100%);
+  text-align: center;
+}
+
+.access-briefing-card h2 {
+  margin: 0 0 10px;
+  font-size: clamp(2rem, 4vw, 2.6rem);
+}
+
+.access-briefing-copy {
+  margin: 0 auto;
+  max-width: 38ch;
+  color: var(--gray-200);
+  line-height: 1.75;
+}
+
+.access-briefing-rotator {
+  position: relative;
+  min-height: 2.1rem;
+  margin-top: 28px;
+}
+
+.access-briefing-line {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transform: translateY(8px);
+  color: var(--gold-soft);
+  font-family: "Montserrat", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: opacity 260ms ease, transform 260ms ease;
+}
+
+.access-briefing-line.is-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.access-briefing-progress {
+  width: min(320px, 100%);
+  height: 4px;
+  margin: 34px auto 0;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.access-briefing-progress-bar {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: left center;
+  background: linear-gradient(90deg, rgba(201, 162, 74, 0.45), rgba(227, 192, 106, 0.95));
+  animation: briefingLoad 4.2s linear forwards;
 }
 
 .topbar {
@@ -1781,6 +1876,15 @@ h3 {
   }
 }
 
+@keyframes briefingLoad {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
 .panel-intro,
 .copy-card,
 .icon-card,
@@ -2016,6 +2120,10 @@ h3 {
 
   .access-gate-card {
     padding: 26px;
+  }
+
+  .access-briefing {
+    padding: 16px;
   }
 
   .companion {
