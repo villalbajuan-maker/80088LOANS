@@ -12,7 +12,16 @@ const navLinks = [...document.querySelectorAll(".topnav a")];
 const mobileNavLinks = [...document.querySelectorAll(".mobile-nav a")];
 const prevSectionButton = document.getElementById("prev-section");
 const nextSectionButton = document.getElementById("next-section");
+const companionOrb = document.getElementById("companion-orb");
+const companionPanel = document.getElementById("companion-panel");
+const companionBackdrop = document.getElementById("companion-backdrop");
+const companionClose = document.getElementById("companion-close");
+const companionForm = document.getElementById("companion-form");
+const companionInput = document.getElementById("companion-input");
+const companionThread = document.getElementById("companion-thread");
+const suggestionButtons = [...document.querySelectorAll(".suggestion-chip")];
 let currentSectionIndex = 0;
+let companionPending = false;
 
 function formatLabel(section) {
   return section.querySelector(".eyebrow")?.textContent?.trim() || section.id;
@@ -159,3 +168,150 @@ function animateReturn() {
 if (sections[0]) {
   setActiveSection(0);
 }
+
+function setCompanionOpen(isOpen) {
+  if (!companionPanel || !companionOrb) return;
+  companionPanel.classList.toggle("open", isOpen);
+  companionBackdrop?.classList.toggle("open", isOpen);
+  companionPanel.setAttribute("aria-hidden", String(!isOpen));
+  companionOrb.setAttribute("aria-expanded", String(isOpen));
+  document.body.classList.toggle("companion-open", isOpen);
+  if (isOpen) companionInput?.focus();
+}
+
+function appendMessage(role, text, citations = [], meta = "", options = {}) {
+  if (!companionThread) return;
+  const article = document.createElement("article");
+  article.className = `message message-${role}`;
+  if (options.loading) {
+    article.classList.add("message-loading");
+  }
+
+  const metaRow = document.createElement("div");
+  metaRow.className = "message-meta-row";
+
+  const roleLabel = document.createElement("span");
+  roleLabel.className = "message-role";
+  roleLabel.textContent = role === "assistant" ? "Atlas" : "You";
+  metaRow.appendChild(roleLabel);
+  article.appendChild(metaRow);
+
+  const bubble = document.createElement("div");
+  bubble.className = "message-bubble";
+  bubble.textContent = text;
+  article.appendChild(bubble);
+
+  if (citations.length && role === "assistant") {
+    const citationsWrap = document.createElement("div");
+    citationsWrap.className = "message-citations";
+
+    citations.forEach((citation) => {
+      const link = document.createElement("a");
+      link.className = "citation-link";
+      link.href = `#${citation.sectionId}`;
+      link.textContent = `${citation.title} · ${citation.sourceLabel}`;
+      citationsWrap.appendChild(link);
+    });
+
+    bubble.appendChild(citationsWrap);
+  }
+
+  if (meta && role === "assistant") {
+    const metaNode = document.createElement("div");
+    metaNode.className = "message-meta";
+    metaNode.textContent = meta;
+    bubble.appendChild(metaNode);
+  }
+
+  companionThread.appendChild(article);
+  companionThread.scrollTop = companionThread.scrollHeight;
+  return article;
+}
+
+async function askCompanion(question) {
+  if (companionPending) return;
+  companionPending = true;
+  appendMessage("user", question);
+  const loadingMessage = appendMessage(
+    "assistant",
+    "Reviewing the presentation and preparing a concise answer...",
+    [],
+    "",
+    { loading: true },
+  );
+
+  if (companionInput) {
+    companionInput.disabled = true;
+  }
+
+  try {
+    const response = await fetch("/api/companion", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ question }),
+    });
+
+    const result = await response.json();
+    loadingMessage?.remove();
+
+    if (!response.ok) {
+      appendMessage(
+        "assistant",
+        "The companion could not answer right now. Please try again in a moment.",
+      );
+      return;
+    }
+
+    appendMessage(
+      "assistant",
+      result.answer,
+      result.citations || [],
+      result.warning || (result.mode === "fallback" ? "Local retrieval mode." : "AI-assisted answer."),
+    );
+  } catch (error) {
+    loadingMessage?.remove();
+    appendMessage(
+      "assistant",
+      "The companion ran into a connection issue. Please try again shortly.",
+    );
+  } finally {
+    companionPending = false;
+    if (companionInput) {
+      companionInput.disabled = false;
+      companionInput.focus();
+    }
+  }
+}
+
+companionOrb?.addEventListener("click", () => {
+  const isOpen = companionPanel?.classList.contains("open");
+  setCompanionOpen(!isOpen);
+});
+
+companionClose?.addEventListener("click", () => setCompanionOpen(false));
+companionBackdrop?.addEventListener("click", () => setCompanionOpen(false));
+
+suggestionButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const question = button.textContent.trim();
+    setCompanionOpen(true);
+    askCompanion(question);
+  });
+});
+
+companionForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const question = companionInput?.value.trim();
+  if (!question) return;
+  companionInput.value = "";
+  setCompanionOpen(true);
+  askCompanion(question);
+});
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && companionPanel?.classList.contains("open")) {
+    setCompanionOpen(false);
+  }
+});
