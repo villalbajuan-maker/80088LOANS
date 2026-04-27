@@ -3,15 +3,22 @@ const accessGate = document.getElementById("access-gate");
 const accessGateForm = document.getElementById("access-gate-form");
 const accessLogin = document.getElementById("access-login");
 const accessCode = document.getElementById("access-code");
+const accessCodeToggle = document.getElementById("access-code-toggle");
+const accessCodeToggleText = document.querySelector(".access-code-toggle-text");
 const accessGateError = document.getElementById("access-gate-error");
 const accessBriefing = document.getElementById("access-briefing");
 const accessBriefingLines = [...document.querySelectorAll(".access-briefing-line")];
+const houstonMapNode = document.getElementById("houston-map");
+const mapFocusButtons = [...document.querySelectorAll(".map-focus-button")];
 const dotsWrap = document.getElementById("rail-dots");
 const progress = document.querySelector(".rail-progress");
 const tabs = [...document.querySelectorAll(".tab-button")];
 const tabPanels = [...document.querySelectorAll(".tab-panel")];
 const gauge = document.querySelector(".gauge");
+const gaugeValue = document.querySelector(".gauge-value");
 const returnsTarget = document.querySelector(".returns-end");
+const heroMetricValues = [...document.querySelectorAll(".metric-value")];
+const stackNumbers = [...document.querySelectorAll(".stack-number")];
 const statusIndex = document.getElementById("status-index");
 const statusLabel = document.getElementById("status-label");
 const hudTitle = document.getElementById("hud-title");
@@ -29,11 +36,41 @@ const companionThread = document.getElementById("companion-thread");
 const suggestionButtons = [...document.querySelectorAll(".suggestion-chip")];
 let currentSectionIndex = 0;
 let companionPending = false;
+let heroMetricsAnimated = false;
+let capitalAnimated = false;
+let houstonMap;
+let houstonMapReady = false;
 const ACCESS_LOGIN = "investor";
 const ACCESS_CODE = "80088loans";
 const ACCESS_STORAGE_KEY = "80088loans-investor-access";
 const BRIEFING_DURATION_MS = 4200;
 const BRIEFING_ROTATION_MS = 1150;
+const HOUSTON_MAP_POINTS = [
+  {
+    id: "green-river",
+    title: "Green River",
+    copy: "77028 focus with permit-backed infill positioning.",
+    center: [-95.286, 29.828],
+  },
+  {
+    id: "ward",
+    title: "Ward / Foster Place",
+    copy: "77021 cluster with assemblage and shovel-ready momentum.",
+    center: [-95.345, 29.695],
+  },
+  {
+    id: "berry",
+    title: "Berry Street",
+    copy: "77004 infill pocket with replatted lot concentration.",
+    center: [-95.369, 29.731],
+  },
+  {
+    id: "wycliffe",
+    title: "Wycliffe",
+    copy: "77043 small-cluster development focus in west Houston.",
+    center: [-95.561, 29.818],
+  },
+];
 
 function unlockPresentation() {
   accessGate?.classList.add("is-hidden");
@@ -43,6 +80,14 @@ function unlockPresentation() {
   document.body.classList.remove("access-locked");
   document.body.classList.remove("access-briefing-active");
   sessionStorage.setItem(ACCESS_STORAGE_KEY, "granted");
+
+  if (sections[currentSectionIndex]?.id === "cover") {
+    animateHeroMetrics();
+  }
+
+  window.setTimeout(() => {
+    houstonMap?.resize();
+  }, 120);
 }
 
 function showBriefingThenUnlock() {
@@ -81,6 +126,96 @@ function initAccessGate() {
   accessGate?.setAttribute("aria-hidden", "false");
   document.body.classList.add("access-locked");
   accessLogin?.focus();
+}
+
+function setActiveMapFocus(id) {
+  mapFocusButtons.forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.focusId === id);
+  });
+}
+
+async function initHoustonMap() {
+  if (houstonMapReady || !houstonMapNode || !window.mapboxgl) return;
+
+  let mapboxToken = "";
+  try {
+    const response = await fetch("/api/mapbox-token");
+    if (!response.ok) return;
+    const payload = await response.json();
+    mapboxToken = payload.token || "";
+  } catch (error) {
+    return;
+  }
+
+  if (!mapboxToken) return;
+
+  window.mapboxgl.accessToken = mapboxToken;
+
+  houstonMap = new window.mapboxgl.Map({
+    container: houstonMapNode,
+    style: "mapbox://styles/mapbox/dark-v11",
+    center: [-95.3698, 29.7604],
+    zoom: 9.5,
+    pitch: 20,
+    bearing: -8,
+    attributionControl: false,
+  });
+
+  houstonMap.scrollZoom.disable();
+
+  const bounds = new window.mapboxgl.LngLatBounds();
+
+  HOUSTON_MAP_POINTS.forEach((point) => {
+    bounds.extend(point.center);
+
+    const markerNode = document.createElement("div");
+    markerNode.className = "map-marker";
+
+    const popup = new window.mapboxgl.Popup({
+      offset: 18,
+      closeButton: false,
+    }).setHTML(
+      `<p class="map-popup-title">${point.title}</p><p class="map-popup-copy">${point.copy}</p>`,
+    );
+
+    const marker = new window.mapboxgl.Marker(markerNode)
+      .setLngLat(point.center)
+      .setPopup(popup)
+      .addTo(houstonMap);
+
+    markerNode.addEventListener("mouseenter", () => popup.addTo(houstonMap));
+    markerNode.addEventListener("mouseleave", () => popup.remove());
+    point.marker = marker;
+    point.popup = popup;
+  });
+
+  houstonMap.on("load", () => {
+    houstonMap.fitBounds(bounds, {
+      padding: { top: 56, right: 56, bottom: 56, left: 56 },
+      maxZoom: 10.8,
+      duration: 0,
+    });
+
+    setActiveMapFocus("green-river");
+    houstonMapReady = true;
+  });
+
+  mapFocusButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const point = HOUSTON_MAP_POINTS.find((item) => item.id === button.dataset.focusId);
+      if (!point || !houstonMap) return;
+
+      setActiveMapFocus(point.id);
+      houstonMap.flyTo({
+        center: point.center,
+        zoom: 11.5,
+        speed: 0.7,
+        essential: true,
+      });
+
+      point.popup?.setLngLat(point.center).addTo(houstonMap);
+    });
+  });
 }
 
 function formatLabel(section) {
@@ -133,6 +268,20 @@ function setActiveSection(activeIndex) {
 
   if (activeSection.id === "returns") {
     animateReturn();
+  }
+
+  if (activeSection.id === "cover") {
+    animateHeroMetrics();
+  }
+
+  if (activeSection.id === "capital") {
+    animateCapitalStack();
+  }
+
+  if (activeSection.id === "opportunity") {
+    window.setTimeout(() => {
+      houstonMap?.resize();
+    }, 120);
   }
 }
 
@@ -196,12 +345,99 @@ window.addEventListener("keydown", (event) => {
 });
 
 let gaugeAnimated = false;
+function animateCount(node, target, options = {}) {
+  if (!node) return;
+  const prefix = options.prefix || "";
+  const suffix = options.suffix || "";
+  const duration = options.duration || 1200;
+  const startValue = Number(options.startValue || 0);
+  const start = performance.now();
+
+  const step = (now) => {
+    const progressValue = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progressValue, 3);
+    const currentValue = Math.round(startValue + (target - startValue) * eased);
+    node.textContent = `${prefix}${currentValue.toLocaleString()}${suffix}`;
+    if (progressValue < 1) {
+      requestAnimationFrame(step);
+    }
+  };
+
+  requestAnimationFrame(step);
+}
+
+function animateRange(node, startTarget, endTarget, duration = 1400) {
+  if (!node) return;
+  const start = performance.now();
+
+  const step = (now) => {
+    const progressValue = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progressValue, 3);
+    const currentStart = Math.max(1, Math.round(startTarget * eased));
+    const currentEnd = Math.max(currentStart, Math.round(endTarget * eased));
+    node.textContent = `${currentStart}-${currentEnd}`;
+    if (progressValue < 1) {
+      requestAnimationFrame(step);
+    }
+  };
+
+  requestAnimationFrame(step);
+}
+
+function animateHeroMetrics() {
+  if (heroMetricsAnimated) return;
+  if (
+    document.body.classList.contains("access-locked") ||
+    document.body.classList.contains("access-briefing-active")
+  ) {
+    return;
+  }
+  heroMetricsAnimated = true;
+
+  heroMetricValues.forEach((node, index) => {
+    const countTarget = Number(node.dataset.countTarget || "");
+    const suffix = node.dataset.countSuffix || "";
+    const rangeStart = Number(node.dataset.rangeStart || "");
+    const rangeEnd = Number(node.dataset.rangeEnd || "");
+
+    window.setTimeout(() => {
+      if (Number.isFinite(countTarget) && countTarget > 0) {
+        animateCount(node, countTarget, { suffix, duration: 1100 + index * 120 });
+        return;
+      }
+
+      if (Number.isFinite(rangeStart) && Number.isFinite(rangeEnd) && rangeEnd > 0) {
+        animateRange(node, rangeStart, rangeEnd, 1400);
+      }
+    }, index * 140);
+  });
+}
+
+function animateCapitalStack() {
+  if (capitalAnimated) return;
+  capitalAnimated = true;
+
+  stackNumbers.forEach((node, index) => {
+    const countTarget = Number(node.dataset.countTarget || "0");
+    const suffix = node.dataset.countSuffix || "";
+
+    window.setTimeout(() => {
+      animateCount(node, countTarget, {
+        suffix,
+        duration: 1300 + index * 120,
+      });
+    }, index * 180);
+  });
+}
+
 function animateGauge() {
   if (gaugeAnimated || !gauge) return;
   gaugeAnimated = true;
   const score = Number(gauge.dataset.score || "81");
   const degrees = Math.round((score / 100) * 360);
   gauge.style.background = `radial-gradient(circle at center, rgba(11, 31, 58, 0.94) 0 58%, transparent 59%), conic-gradient(#c9a24a 0deg, #c9a24a ${degrees}deg, rgba(255,255,255,0.08) ${degrees}deg)`;
+  const gaugeTarget = Number(gaugeValue?.dataset.countTarget || "81");
+  animateCount(gaugeValue, gaugeTarget, { duration: 1400 });
 }
 
 let returnAnimated = false;
@@ -254,6 +490,23 @@ accessGateForm?.addEventListener("submit", (event) => {
 });
 
 initAccessGate();
+initHoustonMap();
+
+accessCodeToggle?.addEventListener("click", () => {
+  if (!accessCode) return;
+
+  const isHidden = accessCode.type === "password";
+  accessCode.type = isHidden ? "text" : "password";
+  accessCodeToggle.setAttribute("aria-pressed", String(isHidden));
+  accessCodeToggle.setAttribute(
+    "aria-label",
+    isHidden ? "Hide access code" : "Show access code",
+  );
+
+  if (accessCodeToggleText) {
+    accessCodeToggleText.textContent = isHidden ? "Hide" : "Show";
+  }
+});
 
 function setCompanionOpen(isOpen) {
   if (!companionPanel || !companionOrb) return;

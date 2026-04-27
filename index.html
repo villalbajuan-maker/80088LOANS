@@ -35,6 +35,10 @@
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body class="access-locked">
@@ -57,23 +61,34 @@
           </p>
         </div>
         <form class="access-gate-form" id="access-gate-form">
-          <label for="access-login">Investor Login</label>
+          <label for="access-login">Perfil</label>
           <input
             id="access-login"
             name="login"
             type="text"
             autocomplete="username"
-            placeholder="Enter your login"
+            value="investor"
             required
           />
           <label for="access-code">Access Code</label>
-          <input
-            id="access-code"
-            name="code"
-            type="password"
-            autocomplete="current-password"
-            required
-          />
+          <div class="access-code-wrap">
+            <input
+              id="access-code"
+              name="code"
+              type="password"
+              autocomplete="current-password"
+              required
+            />
+            <button
+              class="access-code-toggle"
+              id="access-code-toggle"
+              type="button"
+              aria-label="Show access code"
+              aria-pressed="false"
+            >
+              <span class="access-code-toggle-text">Show</span>
+            </button>
+          </div>
           <p class="access-gate-note">Credentials are provided separately.</p>
           <p class="access-gate-error" id="access-gate-error" aria-live="polite"></p>
           <button class="button button-gold access-gate-submit" type="submit">Continue</button>
@@ -160,17 +175,17 @@
             <div class="hero-stats">
               <article class="metric-card glass">
                 <span class="metric-label">Structured Return</span>
-                <strong class="metric-value">20%</strong>
+                <strong class="metric-value" data-count-target="20" data-count-suffix="%">20%</strong>
                 <span class="metric-sub">Fixed return profile</span>
               </article>
               <article class="metric-card glass">
                 <span class="metric-label">Investment Term</span>
-                <strong class="metric-value">9-18</strong>
+                <strong class="metric-value" data-range-start="9" data-range-end="18">9-18</strong>
                 <span class="metric-sub">Months to maturity</span>
               </article>
               <article class="metric-card glass">
                 <span class="metric-label">Pipeline Scope</span>
-                <strong class="metric-value">33</strong>
+                <strong class="metric-value" data-count-target="33">33</strong>
                 <span class="metric-sub">Targeted infill opportunities</span>
               </article>
             </div>
@@ -203,56 +218,19 @@
             <div class="map-card glass">
               <div class="map-header">
                 <span class="caption">Houston focus map</span>
-                <span class="zip-pill">77007</span>
-                <span class="zip-pill">77008</span>
-                <span class="zip-pill">77009</span>
-                <span class="zip-pill">77019</span>
-                <span class="zip-pill">77023</span>
+                <span class="map-kicker">Selected infill focus points</span>
               </div>
-              <svg viewBox="0 0 520 360" class="houston-map" aria-label="Houston infill target zip codes">
-                <defs>
-                  <linearGradient id="mapGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#173a68" />
-                    <stop offset="100%" stop-color="#0b1f3a" />
-                  </linearGradient>
-                </defs>
-                <path
-                  d="M88 103l81-42 81 11 57-25 119 46-14 62 37 55-62 42-28 55-87 10-56-28-93 15-62-44 13-71-29-41z"
-                  fill="url(#mapGlow)"
-                  stroke="rgba(255,255,255,0.18)"
-                  stroke-width="2"
-                />
-                <path
-                  d="M100 150h324M149 99l181 205M242 76l-47 226M396 112l-244 106"
-                  stroke="rgba(255,255,255,0.07)"
-                  stroke-width="2"
-                />
-                <g class="map-point">
-                  <circle cx="195" cy="128" r="10"></circle>
-                  <circle cx="195" cy="128" r="26" class="pulse"></circle>
-                  <text x="214" y="133">77008</text>
-                </g>
-                <g class="map-point">
-                  <circle cx="231" cy="159" r="10"></circle>
-                  <circle cx="231" cy="159" r="26" class="pulse"></circle>
-                  <text x="249" y="164">77007</text>
-                </g>
-                <g class="map-point">
-                  <circle cx="251" cy="118" r="10"></circle>
-                  <circle cx="251" cy="118" r="26" class="pulse"></circle>
-                  <text x="269" y="123">77009</text>
-                </g>
-                <g class="map-point">
-                  <circle cx="294" cy="184" r="10"></circle>
-                  <circle cx="294" cy="184" r="26" class="pulse"></circle>
-                  <text x="313" y="189">77019</text>
-                </g>
-                <g class="map-point">
-                  <circle cx="331" cy="213" r="10"></circle>
-                  <circle cx="331" cy="213" r="26" class="pulse"></circle>
-                  <text x="349" y="218">77023</text>
-                </g>
-              </svg>
+              <div
+                id="houston-map"
+                class="houston-map-live"
+                aria-label="Houston infill focus map"
+              ></div>
+              <div class="map-focus-list" id="map-focus-list">
+                <button class="map-focus-button is-active" type="button" data-focus-id="green-river">Green River</button>
+                <button class="map-focus-button" type="button" data-focus-id="ward">Ward</button>
+                <button class="map-focus-button" type="button" data-focus-id="berry">Berry</button>
+                <button class="map-focus-button" type="button" data-focus-id="wycliffe">Wycliffe</button>
+              </div>
             </div>
           </div>
         </section>
@@ -519,8 +497,14 @@
           <div class="capital-grid">
             <div class="stack-card glass">
               <div class="stack-bar">
-                <div class="stack-top">20%<span>Investor - Senior Debt</span></div>
-                <div class="stack-bottom">80%<span>Sponsor / Capital</span></div>
+                <div class="stack-top">
+                  <strong class="stack-number" data-count-target="20" data-count-suffix="%">20%</strong>
+                  <span>Investor - Senior Debt</span>
+                </div>
+                <div class="stack-bottom">
+                  <strong class="stack-number" data-count-target="80" data-count-suffix="%">80%</strong>
+                  <span>Sponsor / Capital</span>
+                </div>
               </div>
             </div>
             <div class="copy-card glass">
@@ -572,7 +556,7 @@
           <div class="gauge-wrap glass">
             <div class="gauge" data-score="81">
               <div class="gauge-inner">
-                <span class="gauge-value">81</span>
+                <span class="gauge-value" data-count-target="81">81</span>
                 <span class="gauge-denominator">/ 100</span>
               </div>
             </div>
@@ -662,6 +646,7 @@
       </div>
     </div>
 
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.js"></script>
     <script src="./app.js"></script>
   </body>
 </html>

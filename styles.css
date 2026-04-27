@@ -171,6 +171,37 @@ button,
   transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
 }
 
+.access-code-wrap {
+  position: relative;
+}
+
+.access-code-wrap input {
+  padding-right: 92px;
+}
+
+.access-code-toggle {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  min-width: 68px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--gray-200);
+  font: inherit;
+  font-size: 0.84rem;
+  cursor: pointer;
+  transition: border-color 180ms ease, background 180ms ease, color 180ms ease;
+}
+
+.access-code-toggle:hover {
+  border-color: rgba(201, 162, 74, 0.28);
+  background: rgba(201, 162, 74, 0.1);
+  color: var(--gold-soft);
+}
+
 .access-gate-form input:focus {
   outline: none;
   border-color: rgba(201, 162, 74, 0.42);
@@ -630,6 +661,8 @@ h3 {
   margin: 8px 0 6px;
   font-family: "Montserrat", sans-serif;
   font-size: 2.8rem;
+  line-height: 0.95;
+  font-variant-numeric: tabular-nums;
 }
 
 .metric-sub {
@@ -815,9 +848,15 @@ h3 {
 .map-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
   flex-wrap: wrap;
   margin-bottom: 12px;
+}
+
+.map-kicker {
+  color: var(--gray-300);
+  font-size: 0.82rem;
 }
 
 .zip-pill {
@@ -829,38 +868,96 @@ h3 {
   font-size: 0.8rem;
 }
 
-.houston-map {
+.houston-map-live {
   width: 100%;
-  height: auto;
+  min-height: 360px;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(18, 36, 62, 0.9), rgba(8, 18, 34, 0.96));
 }
 
-.map-point circle:first-child {
-  fill: var(--gold);
+.map-focus-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
 }
 
-.map-point text {
-  fill: var(--white);
+.map-focus-button {
+  padding: 9px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--gray-200);
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.map-focus-button.is-active,
+.map-focus-button:hover {
+  color: var(--gold-soft);
+  border-color: rgba(201, 162, 74, 0.28);
+  background: rgba(201, 162, 74, 0.12);
+}
+
+.mapboxgl-ctrl-bottom-left,
+.mapboxgl-ctrl-bottom-right {
+  display: none;
+}
+
+.mapboxgl-popup-content {
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(10, 22, 40, 0.96);
+  color: var(--white);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.34);
+}
+
+.mapboxgl-popup-close-button {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.map-popup-title {
+  margin: 0 0 4px;
   font-family: "Montserrat", sans-serif;
-  font-size: 14px;
+  font-size: 0.95rem;
 }
 
-.pulse {
-  fill: rgba(201, 162, 74, 0.08);
-  stroke: rgba(201, 162, 74, 0.45);
-  stroke-width: 1.5;
+.map-popup-copy {
+  margin: 0;
+  color: var(--gray-200);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.map-marker {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f1d998, #c9a24a);
+  box-shadow: 0 0 0 6px rgba(201, 162, 74, 0.12), 0 0 24px rgba(201, 162, 74, 0.28);
+}
+
+.map-marker::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 999px;
+  border: 1px solid rgba(201, 162, 74, 0.36);
   animation: pulse 2.4s infinite;
 }
 
 @keyframes pulse {
   0% {
     opacity: 0.85;
-    transform-origin: center;
     transform: scale(0.86);
   }
   100% {
     opacity: 0;
-    transform-origin: center;
-    transform: scale(1.3);
+    transform: scale(1.35);
   }
 }
 
@@ -1219,9 +1316,11 @@ h3 {
 .stack-bar {
   overflow: hidden;
   border-radius: 28px;
-  min-height: 380px;
+  min-height: 420px;
   display: flex;
   flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
 }
 
 .stack-top,
@@ -1232,8 +1331,7 @@ h3 {
   flex-direction: column;
   text-align: center;
   font-family: "Montserrat", sans-serif;
-  font-size: 3.4rem;
-  font-weight: 800;
+  padding: 24px 18px;
 }
 
 .stack-top span,
@@ -1241,16 +1339,27 @@ h3 {
   margin-top: 10px;
   font-size: 1rem;
   font-weight: 600;
+  line-height: 1.4;
+}
+
+.stack-number {
+  display: block;
+  font-size: 3.4rem;
+  font-weight: 800;
+  line-height: 0.95;
+  font-variant-numeric: tabular-nums;
 }
 
 .stack-top {
-  height: 20%;
+  flex: 0 0 20%;
+  min-height: 112px;
   background: linear-gradient(180deg, #eedca6, #c9a24a);
   color: #151515;
 }
 
 .stack-bottom {
-  height: 80%;
+  flex: 1 1 auto;
+  min-height: 292px;
   color: var(--white);
   background: linear-gradient(180deg, #173a68, #0b1f3a);
 }
@@ -1317,6 +1426,7 @@ h3 {
   font-family: "Montserrat", sans-serif;
   font-size: 4rem;
   font-weight: 800;
+  font-variant-numeric: tabular-nums;
 }
 
 .gauge-denominator {
