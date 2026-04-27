@@ -37,7 +37,50 @@
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body>
+  <body class="access-locked">
+    <div class="access-gate" id="access-gate" aria-hidden="false">
+      <div class="access-gate-bg"></div>
+      <div class="access-gate-card glass">
+        <div class="access-gate-brand">
+          <span class="brand-mark">80088</span>
+          <div>
+            <p class="eyebrow">Private Access</p>
+            <h1 class="brand-name">80088LOANS</h1>
+          </div>
+        </div>
+        <div class="access-gate-copy">
+          <p class="eyebrow">Investor Access</p>
+          <h2>Enter the presentation</h2>
+          <p>
+            This presentation is intended for direct investor review. Enter the
+            login and access code to continue.
+          </p>
+        </div>
+        <form class="access-gate-form" id="access-gate-form">
+          <label for="access-login">Login</label>
+          <input
+            id="access-login"
+            name="login"
+            type="text"
+            autocomplete="username"
+            placeholder="investor"
+            required
+          />
+          <label for="access-code">Access Code</label>
+          <input
+            id="access-code"
+            name="code"
+            type="password"
+            autocomplete="current-password"
+            placeholder="80088loans"
+            required
+          />
+          <p class="access-gate-error" id="access-gate-error" aria-live="polite"></p>
+          <button class="button button-gold access-gate-submit" type="submit">Enter Presentation</button>
+        </form>
+      </div>
+    </div>
+
     <div class="site-shell">
       <header class="topbar">
         <div class="brand-lockup">

@@ -1,4 +1,9 @@
 const sections = [...document.querySelectorAll(".panel")];
+const accessGate = document.getElementById("access-gate");
+const accessGateForm = document.getElementById("access-gate-form");
+const accessLogin = document.getElementById("access-login");
+const accessCode = document.getElementById("access-code");
+const accessGateError = document.getElementById("access-gate-error");
 const dotsWrap = document.getElementById("rail-dots");
 const progress = document.querySelector(".rail-progress");
 const tabs = [...document.querySelectorAll(".tab-button")];
@@ -22,6 +27,30 @@ const companionThread = document.getElementById("companion-thread");
 const suggestionButtons = [...document.querySelectorAll(".suggestion-chip")];
 let currentSectionIndex = 0;
 let companionPending = false;
+const ACCESS_LOGIN = "investor";
+const ACCESS_CODE = "80088loans";
+const ACCESS_STORAGE_KEY = "80088loans-investor-access";
+
+function unlockPresentation() {
+  accessGate?.classList.add("is-hidden");
+  accessGate?.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("access-locked");
+  sessionStorage.setItem(ACCESS_STORAGE_KEY, "granted");
+}
+
+function initAccessGate() {
+  const hasAccess = sessionStorage.getItem(ACCESS_STORAGE_KEY) === "granted";
+
+  if (hasAccess) {
+    unlockPresentation();
+    return;
+  }
+
+  accessGate?.classList.remove("is-hidden");
+  accessGate?.setAttribute("aria-hidden", "false");
+  document.body.classList.add("access-locked");
+  accessLogin?.focus();
+}
 
 function formatLabel(section) {
   return section.querySelector(".eyebrow")?.textContent?.trim() || section.id;
@@ -168,6 +197,32 @@ function animateReturn() {
 if (sections[0]) {
   setActiveSection(0);
 }
+
+accessGateForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const loginValue = accessLogin?.value.trim().toLowerCase() || "";
+  const codeValue = accessCode?.value.trim() || "";
+
+  if (loginValue === ACCESS_LOGIN && codeValue === ACCESS_CODE) {
+    if (accessGateError) {
+      accessGateError.textContent = "";
+    }
+    unlockPresentation();
+    return;
+  }
+
+  if (accessGateError) {
+    accessGateError.textContent = "The login or access code is incorrect.";
+  }
+
+  if (accessCode) {
+    accessCode.value = "";
+    accessCode.focus();
+  }
+});
+
+initAccessGate();
 
 function setCompanionOpen(isOpen) {
   if (!companionPanel || !companionOrb) return;
